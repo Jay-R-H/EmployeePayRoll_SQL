@@ -1,0 +1,290 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.27 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| practise           |
+| speed              |
+| sys                |
+| test               |
++--------------------+
+8 rows in set (0.07 sec)
+
+mysql> use payroll_service;
+Database changed
+mysql> show tables;
++---------------------------+
+| Tables_in_payroll_service |
++---------------------------+
+| employee_payroll          |
++---------------------------+
+1 row in set (0.02 sec)
+
+mysql> select database();
++-----------------+
+| database()      |
++-----------------+
+| payroll_service |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select * from employee_payroll;
++----+----------+--------+------------+
+| id | name     | salary | start      |
++----+----------+--------+------------+
+|  1 | Bill     |   1200 | 2021-09-08 |
+|  2 | Kendra   |   1450 | 2021-05-06 |
+|  3 | Kane     |   1250 | 2021-01-03 |
+|  4 | Grealish |   1565 | 2021-09-12 |
++----+----------+--------+------------+
+4 rows in set (0.02 sec)
+
+mysql> update table employee_payroll delete where id =3;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table employee_payroll delete where id =3' at line 1
+mysql> delete from employee_payroll where id =3;
+Query OK, 1 row affected (0.40 sec)
+
+mysql> select * from employee_payroll;
++----+----------+--------+------------+
+| id | name     | salary | start      |
++----+----------+--------+------------+
+|  1 | Bill     |   1200 | 2021-09-08 |
+|  2 | Kendra   |   1450 | 2021-05-06 |
+|  4 | Grealish |   1565 | 2021-09-12 |
++----+----------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> delete from employee_payroll where id =4;
+Query OK, 1 row affected (0.23 sec)
+
+mysql> select * from employee_payroll;
++----+--------+--------+------------+
+| id | name   | salary | start      |
++----+--------+--------+------------+
+|  1 | Bill   |   1200 | 2021-09-08 |
+|  2 | Kendra |   1450 | 2021-05-06 |
++----+--------+--------+------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into employee_payroll (id,name,salary,start) values (3,'charlie',55000,'2021-05-21');
+Query OK, 1 row affected (1.07 sec)
+
+mysql> update table employee_payroll setname = 'Terisa' where id =2;mysql> update employee_payroll set name = 'Terisa' where id =2;
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+--------+------------+
+| id | name    | salary | start      |
++----+---------+--------+------------+
+|  1 | Bill    |   1200 | 2021-09-08 |
+|  2 | Terisa  |   1450 | 2021-05-06 |
+|  3 | charlie |  55000 | 2021-05-21 |
++----+---------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> update employee_payroll set salary = 1000000.00 where id =1;
+Query OK, 1 row affected (0.42 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set salary = 2000000.00 where id =2;
+Query OK, 1 row affected (0.15 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set salary = 1500000.00 where id =3;
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+---------+------------+
+| id | name    | salary  | start      |
++----+---------+---------+------------+
+|  1 | Bill    | 1000000 | 2021-09-08 |
+|  2 | Terisa  | 2000000 | 2021-05-06 |
+|  3 | charlie | 1500000 | 2021-05-21 |
++----+---------+---------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from employee_role where name = 'Bill';
+ERROR 1146 (42S02): Table 'payroll_service.employee_role' doesn't exist
+mysql> select * from employee_payroll where name = 'Bill';
++----+------+---------+------------+
+| id | name | salary  | start      |
++----+------+---------+------------+
+|  1 | Bill | 1000000 | 2021-09-08 |
++----+------+---------+------------+
+1 row in set (0.03 sec)
+
+mysql> select * from employee_payroll where start between cast ('2020-01-01' as date) and date(now());
+ERROR 1584 (42000): Incorrect parameters in the call to stored function `cast`
+mysql> select * from employee_payroll where start between cast('2020-01-01' as date) and date(now());
++----+---------+---------+------------+
+| id | name    | salary  | start      |
++----+---------+---------+------------+
+|  1 | Bill    | 1000000 | 2021-09-08 |
+|  2 | Terisa  | 2000000 | 2021-05-06 |
+|  3 | charlie | 1500000 | 2021-05-21 |
++----+---------+---------+------------+
+3 rows in set (0.25 sec)
+
+mysql> select * from employee_payroll where start between cast('2021-04-01' as date) and date(now());
++----+---------+---------+------------+
+| id | name    | salary  | start      |
++----+---------+---------+------------+
+|  1 | Bill    | 1000000 | 2021-09-08 |
+|  2 | Terisa  | 2000000 | 2021-05-06 |
+|  3 | charlie | 1500000 | 2021-05-21 |
++----+---------+---------+------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table employee_payroll add gender char(1) after name;
+Query OK, 0 rows affected (4.23 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee_payroll;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(150) | NO   |     | NULL    |                |
+| gender | char(1)      | YES  |     | NULL    |                |
+| salary | double       | NO   |     | NULL    |                |
+| start  | date         | NO   |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+5 rows in set (0.44 sec)
+
+mysql> alter table employee_payroll modify gender char(1) not null;
+ERROR 1138 (22004): Invalid use of NULL value
+mysql> alter table employee_payroll modify gender not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null' at line 1
+mysql> insert into employee_payroll (gender) values ('M') where id =1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where id =1' at line 1
+mysql> select * from employee_payroll;
++----+---------+--------+---------+------------+
+| id | name    | gender | salary  | start      |
++----+---------+--------+---------+------------+
+|  1 | Bill    | NULL   | 1000000 | 2021-09-08 |
+|  2 | Terisa  | NULL   | 2000000 | 2021-05-06 |
+|  3 | charlie | NULL   | 1500000 | 2021-05-21 |
++----+---------+--------+---------+------------+
+3 rows in set (0.00 sec)
+
+mysql> update employee_payroll set gender = 'M' where id =1;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set gender = 'M' where id =3;
+Query OK, 1 row affected (0.55 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set gender = 'F' where id =2;
+Query OK, 1 row affected (0.42 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+--------+---------+------------+
+| id | name    | gender | salary  | start      |
++----+---------+--------+---------+------------+
+|  1 | Bill    | M      | 1000000 | 2021-09-08 |
+|  2 | Terisa  | F      | 2000000 | 2021-05-06 |
+|  3 | charlie | M      | 1500000 | 2021-05-21 |
++----+---------+--------+---------+------------+
+3 rows in set (0.00 sec)
+
+mysql> update employee_payroll set salary = 3000000.00 where name ='Terisa';
+Query OK, 1 row affected (0.37 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select max(salary) from employee_payroll;
++-------------+
+| max(salary) |
++-------------+
+|     3000000 |
++-------------+
+1 row in set (0.04 sec)
+
+mysql> select max(salary) as `maximum salary` from employee_payroll;
++----------------+
+| maximum salary |
++----------------+
+|        3000000 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select max(salary) as `maximum salary` from employee_payroll where gender ='F';
++----------------+
+| maximum salary |
++----------------+
+|        3000000 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(salary) as `Average salary` from employee_payroll group by gender;
++----------------+
+| Average salary |
++----------------+
+|        1250000 |
+|        3000000 |
++----------------+
+2 rows in set (0.03 sec)
+
+mysql> select avg(salary) as `Average salary` from employee_payroll where gender = 'M' group by gender;
++----------------+
+| Average salary |
++----------------+
+|        1250000 |
++----------------+
+1 row in set (0.09 sec)
+
+mysql> select gender,avg(salary) as `Average salary` from employee_payroll group by gender;
++--------+----------------+
+| gender | Average salary |
++--------+----------------+
+| M      |        1250000 |
+| F      |        3000000 |
++--------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> select gender,count(gender) from employee_payroll;
++--------+---------------+
+| gender | count(gender) |
++--------+---------------+
+| M      |             3 |
++--------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select gender,count(gender) from employee_payroll group by gender;
++--------+---------------+
+| gender | count(gender) |
++--------+---------------+
+| M      |             2 |
+| F      |             1 |
++--------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> select gender,sum(salary) as `total salary` from employee_payroll group by gender;
++--------+--------------+
+| gender | total salary |
++--------+--------------+
+| M      |      2500000 |
+| F      |      3000000 |
++--------+--------------+
+2 rows in set (0.00 sec)
+
+mysql>
